@@ -7,20 +7,21 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="模型构建思路数据预处理处理蛋白质序列数据并使用 PyTorch 进行模型训练的任务包含了以下几个步骤： 首先，从 Protein Data Bank (PDB) 获取蛋白质序列数据。下为一个通常用于获取 PDB 数据的 python 代码示例。 12345678910111213141516pythonCopy codeimport urllib.requestimport os# The pro">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2023/07/20/hello-world/index.html">
+<meta property="og:title" content="AntiPre基于抗原的辅助抗体生成模型">
+<meta property="og:url" content="http://example.com/2023/07/22/AntiPre%E5%9F%BA%E4%BA%8E%E6%8A%97%E5%8E%9F%E7%9A%84%E8%BE%85%E5%8A%A9%E6%8A%97%E4%BD%93%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="The Cabin of Hamzone">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="模型构建思路数据预处理处理蛋白质序列数据并使用 PyTorch 进行模型训练的任务包含了以下几个步骤： 首先，从 Protein Data Bank (PDB) 获取蛋白质序列数据。下为一个通常用于获取 PDB 数据的 python 代码示例。 12345678910111213141516pythonCopy codeimport urllib.requestimport os# The pro">
 <meta property="og:locale">
-<meta property="article:published_time" content="2023-07-20T12:15:02.661Z">
-<meta property="article:modified_time" content="2023-07-20T17:04:41.094Z">
+<meta property="article:published_time" content="2023-07-22T05:26:12.000Z">
+<meta property="article:modified_time" content="2023-07-22T05:38:19.631Z">
 <meta property="article:author" content="Li Hanzhang">
+<meta property="article:tag" content="深度学习，机器学习，VAE，Diffusion模型">
 <meta name="twitter:card" content="summary">
 
 
-<title >Hello World</title>
+<title >AntiPre基于抗原的辅助抗体生成模型</title>
 
 <!-- Favicon -->
 
@@ -66,7 +67,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Li Hanzhang","root":"/","typed_text":["Always Learning","Always Coding","Always Improving"],"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"Logo.svg","icon16":"Logo.svg","icon32":"Logo.svg","appleTouchIcon":"Logo.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"icon-rijian","moon":"icon-yueduye-yejianmoshi","play":"icon-24gf-playCircle","email":"icon-youxiang","next":"icon-jinrushiyan","calendar":"icon-riqi","clock":"icon-shijian","user":"icon-totop","back_top":"fas fa-arrow-up","close":"icon-anniu_guanbi","search":"icon-sousuo","reward":"icon-dashang","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"icon-read","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"icon-fuzhi"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":200},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"path":"search.xml"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-07-21 01:04:41"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-07-22 13:38:19"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
@@ -263,7 +264,7 @@
                             NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            Hello World
+                            AntiPre基于抗原的辅助抗体生成模型
                         </h1>
 
                         
@@ -406,7 +407,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Quick-Start"  data-scroll-to="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#Create-a-new-post"  data-scroll-to="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#Run-server"  data-scroll-to="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#Generate-static-files"  data-scroll-to="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#Deploy-to-remote-sites"  data-scroll-to="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#模型构建思路"  data-scroll-to="#模型构建思路"><span class="toc-number">1.</span> <span class="toc-text">模型构建思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#数据预处理"  data-scroll-to="#数据预处理"><span class="toc-number">1.1.</span> <span class="toc-text">数据预处理</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#变分自编码器（VAE）和扩散模型（Diffusion）"  data-scroll-to="#变分自编码器（VAE）和扩散模型（Diffusion）"><span class="toc-number">1.2.</span> <span class="toc-text">变分自编码器（VAE）和扩散模型（Diffusion）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#变分自编码器（VAE）"  data-scroll-to="#变分自编码器（VAE）"><span class="toc-number">1.2.1.</span> <span class="toc-text">变分自编码器（VAE）</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#扩散模型（Diffusion）"  data-scroll-to="#扩散模型（Diffusion）"><span class="toc-number">1.2.2.</span> <span class="toc-text">扩散模型（Diffusion）</span></a></li></ol></li></ol></li></ol>
 </div>
             </div>
         </div>
@@ -424,13 +425,13 @@
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="iconfont icon-riqi trm-icon"></i><br>
-            07/20
+            07/22
         </div>
     </div>
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="iconfont icon-shijian trm-icon"></i><br>
-            20:15
+            13:26
         </div>
     </div>
     <div class="col-sm-4">
@@ -442,19 +443,38 @@
 </div>
 <div class="trm-card ">
     <article id="article-container" class="trm-publication">
-    <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <h1 id="模型构建思路"><a href="#模型构建思路" class="headerlink" title="模型构建思路"></a>模型构建思路</h1><h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>处理蛋白质序列数据并使用 PyTorch 进行模型训练的任务包含了以下几个步骤：</p>
+<p>首先，从 Protein Data Bank (PDB) 获取蛋白质序列数据。下为一个通常用于获取 PDB 数据的 python 代码示例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pythonCopy codeimport urllib.request</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"># The protein id</span><br><span class="line">protein_id = &#x27;1abc&#x27;</span><br><span class="line"></span><br><span class="line"># Define the url</span><br><span class="line">url = f&#x27;https://files.rcsb.org/download/&#123;protein_id&#125;.pdb&#x27;</span><br><span class="line"></span><br><span class="line"># Define the local filename</span><br><span class="line">filename = f&#x27;&#123;protein_id&#125;.pdb&#x27;</span><br><span class="line"></span><br><span class="line"># If the file doesn&#x27;t exist, download it</span><br><span class="line">if not os.path.isfile(filename):</span><br><span class="line">    print(f&#x27;Downloading PDB file &#123;protein_id&#125;...&#x27;)</span><br><span class="line">    urllib.request.urlretrieve(url, filename)</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>然后，需要将蛋白质序列数据转换成适合用于模型训练的形式。这通常包括将蛋白质序列数据进行 one-hot 编码或者转换为词嵌入向量等。下面是一个如何进行 one-hot 编码的代码示例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pythonCopy codeimport numpy as np</span><br><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br><span class="line"></span><br><span class="line"># Define the protein sequence</span><br><span class="line">protein_sequence = &#x27;ACDEFGHIKLMNPQRSTVWY&#x27;</span><br><span class="line"></span><br><span class="line"># Reshape the protein sequence to be 2D</span><br><span class="line">protein_sequence = np.array(list(protein_sequence)).reshape(-1, 1)</span><br><span class="line"></span><br><span class="line"># Define the one-hot encoder</span><br><span class="line">encoder = OneHotEncoder(sparse=False)</span><br><span class="line"></span><br><span class="line"># Fit and transform the protein sequence</span><br><span class="line">one_hot_encoded_sequence = encoder.fit_transform(protein_sequence)</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>最后，可以使用 PyTorch 来定义和训练你的模型。这将取决于你想要解决的具体问题和你的数据。例如，如果你正在进行分类任务，你可能需要使用一个卷积神经网络 (CNN) 或循环神经网络 (RNN)。如果你正在进行序列生成任务，你可能需要使用一个生成对抗网络 (GAN) 或变分自编码器 (VAE)。</p>
+<h2 id="变分自编码器（VAE）和扩散模型（Diffusion）"><a href="#变分自编码器（VAE）和扩散模型（Diffusion）" class="headerlink" title="变分自编码器（VAE）和扩散模型（Diffusion）"></a>变分自编码器（VAE）和扩散模型（Diffusion）</h2><h3 id="变分自编码器（VAE）"><a href="#变分自编码器（VAE）" class="headerlink" title="变分自编码器（VAE）"></a>变分自编码器（VAE）</h3><p>首先，我们来理解一下变分自编码器(VAEs)和扩散模型的基本概念。</p>
+<ol>
+<li>变分自编码器(VAEs): VAEs是一类生成模型，通过最大化数据的边缘对数似然性，并在潜在空间中强制执行先验分布(通常为高斯分布)，从而学习数据的隐含表示。VAEs包含编码器和解码器两部分，编码器将输入数据编码为潜在空间的均值和方差，然后从此分布中采样，生成解码器可以解码的潜在向量。</li>
+<li>扩散模型: 扩散模型是一种连续生成模型，可以理解为一个逐步“去噪”的过程。在这个过程中，模型从一个简单的先验分布（如高斯噪声）开始，然后通过一系列的扩散步骤（或去噪步骤）来生成数据。扩散模型最近在图像生成任务上取得了显著的成功。</li>
+</ol>
+<p>结合VAEs和扩散模型来构建生成模型的一种可能的方式是，使用VAEs来学习数据的隐含表示，然后在这个隐含表示上应用扩散过程。这样可以结合VAEs的表示学习能力和扩散模型的生成能力。</p>
+<p>以下是一个简单的例子，展示如何使用PyTorch构建一个基本的变分自编码器。由于扩散模型的实现较为复杂，这里我们只展示了VAEs的部分。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">pythonCopy codeimport torch</span><br><span class="line">from torch import nn</span><br><span class="line"></span><br><span class="line">class VAE(nn.Module):</span><br><span class="line">    def __init__(self, input_dim, latent_dim):</span><br><span class="line">        super(VAE, self).__init__()</span><br><span class="line">        </span><br><span class="line">        # Encoder</span><br><span class="line">        self.encoder = nn.Sequential(</span><br><span class="line">            nn.Linear(input_dim, 512),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(512, latent_dim*2) # 为均值和方差各自预留空间</span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        # Decoder</span><br><span class="line">        self.decoder = nn.Sequential(</span><br><span class="line">            nn.Linear(latent_dim, 512),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(512, input_dim),</span><br><span class="line">            nn.Sigmoid() # 输出层使用sigmoid激活函数，使得输出在(0, 1)范围内</span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">    def reparameterize(self, mu, logvar):</span><br><span class="line">        std = torch.exp(0.5*logvar)</span><br><span class="line">        eps = torch.randn_like(std)</span><br><span class="line">        return mu + eps*std</span><br><span class="line">    </span><br><span class="line">    def forward(self, x):</span><br><span class="line">        h = self.encoder(x)</span><br><span class="line">        mu, logvar = torch.chunk(h, 2, dim=1) # 分割为均值和方差</span><br><span class="line">        z = self.reparameterize(mu, logvar)</span><br><span class="line">        return self.decoder(z), mu, logvar</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>在上述模型中，前向传播函数返回了解码的结果，以及隐含空间的均值和方差。这些值可以用于计算重构损失和KL散度，这两者是变分自编码器的两部分损失。</p>
+<p>扩散模型的部分实现涉及到更多的细节，包括扩散过程的时间步设置、噪声水平的选择等。具体的实现方式需要根据你的具体需求和任务来决定。此外，由于当前对于结合VAEs和扩散模型的研究还不多，如何结合这两种模型可能需要进行一些创新性的尝试。</p>
+<h3 id="扩散模型（Diffusion）"><a href="#扩散模型（Diffusion）" class="headerlink" title="扩散模型（Diffusion）"></a>扩散模型（Diffusion）</h3><p>在实际应用中，扩散模型通常需要大量的计算资源和训练时间，而且模型的性能还取决于许多超参数的精细调整。</p>
+<p>下面的代码显示了一个基本的扩散模型的框架，它使用了一个简单的多层感知器（MLP）作为反向扩散过程的神经网络。由于扩散模型的复杂性，这只是一个简化的版本，仅供参考。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pythonCopy codeimport torch</span><br><span class="line">from torch import nn</span><br><span class="line"></span><br><span class="line">class DiffusionModel(nn.Module):</span><br><span class="line">    def __init__(self, input_dim, hidden_dim, num_steps):</span><br><span class="line">        super(DiffusionModel, self).__init__()</span><br><span class="line">        self.num_steps = num_steps</span><br><span class="line"></span><br><span class="line">        # 定义扩散过程的神经网络，这里使用一个简单的MLP</span><br><span class="line">        self.network = nn.Sequential(</span><br><span class="line">            nn.Linear(input_dim, hidden_dim),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(hidden_dim, input_dim)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    def forward(self, x):</span><br><span class="line">        # 在输入上添加高斯噪声</span><br><span class="line">        noise = torch.randn_like(x)</span><br><span class="line">        x_noisy = x + noise</span><br><span class="line"></span><br><span class="line">        # 进行反向扩散过程</span><br><span class="line">        for _ in range(self.num_steps):</span><br><span class="line">            x_hat = self.network(x_noisy)</span><br><span class="line">            x_noisy = x_hat + torch.randn_like(x_hat)</span><br><span class="line"></span><br><span class="line">        return x_noisy</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>在这个模型中，前向传播函数首先在输入上添加了高斯噪声，然后进行了多步的反向扩散过程。在每一步中，它都使用神经网络来预测去噪后的数据，并在预测结果上再次添加高斯噪声。经过多步的反向扩散后，最终返回生成的数据。</p>
+<p>这是一个非常基础的扩散模型，实际上，在高级应用中，这个模型可能需要使用更复杂的神经网络结构，例如卷积神经网络（CNN）或者变换器（Transformer），并可能需要在每一步中使用不同的神经网络。此外，模型的训练过程也需要进行特别的设计，例如使用噪声对比估计（Noise Contrastive Estimation）或者分解概率流（Denoising Score Matching）等方法。</p>
+<p>在将VAE和扩散模型结合的时候，一个可能的方式是，首先使用VAE的编码器将输入数据编码为潜在空间的表示，然后在这个表示上进行扩散过程。在反向传播的时候，可以同时优化VAE的编码器和解码器，以及扩散模型的神经网络。</p>
+<ol>
+<li>首先，我们需要收集大量的蛋白质序列数据作为训练数据。由于我们无法直接从互联网获取数据，我们假设这些数据已经被保存在一个名为<code>protein_sequences</code>的列表中。</li>
+<li>接下来，我们需要将这些蛋白质序列转换为适合神经网络处理的数值数据。在这个例子中，我们将使用一个简单的方法，将每个氨基酸编码为一个唯一的整数。然后，我们可以使用one-hot编码将这些整数转换为二进制向量。</li>
+<li>接下来，我们将使用VAE来学习蛋白质序列的潜在表示。我们将使用一个简单的多层感知器（MLP）作为VAE的编码器和解码器。</li>
+<li>最后，我们将在VAE的潜在表示上应用扩散模型，生成新的蛋白质序列。</li>
+</ol>
 
 </article>
     
@@ -488,6 +508,7 @@
             <span data-number="02"></span>
         </h5>
     </div>
+    
     
         <div class="col-lg-6">
     <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
@@ -523,7 +544,6 @@
         </div>
     </div>
 </div>
-    
     
 </div>
 
