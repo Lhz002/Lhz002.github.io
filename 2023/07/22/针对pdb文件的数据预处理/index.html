@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="针对PDB文件进行数据预处理PDB文件的基本构成首先，我们需要理解 PDB (Protein Data Bank) 文件的基本结构。PDB 文件通常包含以下几种记录类型：  HEADER：包含有关整个结构的基本信息。 COMPND：描述了分子组成。 AUTHOR：指明了该结构的作者。 ATOM：描述了分子中每个原子的坐标。 TER：标识链的结束。 CONECT：提供了原子间的键连接信息。  对于模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="针对pdb文件的数据预处理">
+<meta property="og:url" content="http://example.com/2023/07/22/%E9%92%88%E5%AF%B9pdb%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="The Cabin of Hamzone">
+<meta property="og:description" content="针对PDB文件进行数据预处理PDB文件的基本构成首先，我们需要理解 PDB (Protein Data Bank) 文件的基本结构。PDB 文件通常包含以下几种记录类型：  HEADER：包含有关整个结构的基本信息。 COMPND：描述了分子组成。 AUTHOR：指明了该结构的作者。 ATOM：描述了分子中每个原子的坐标。 TER：标识链的结束。 CONECT：提供了原子间的键连接信息。  对于模">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-07-22T06:17:54.000Z">
+<meta property="article:modified_time" content="2023-07-22T06:27:53.090Z">
+<meta property="article:author" content="Li Hanzhang">
+<meta property="article:tag" content="深度学习，数据预处理">
+<meta name="twitter:card" content="summary">
+
+
+<title >针对pdb文件的数据预处理</title>
+
+<!-- Favicon -->
+
+    <link href='/Logo.svg?v=2.0.9' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/Logo.svg?v=2.0.9' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/Logo.svg?v=2.0.9' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4177738_vsqmc23e2y.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Li Hanzhang","root":"/","typed_text":["Always Learning","Always Coding","Always Improving"],"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"Logo.svg","icon16":"Logo.svg","icon32":"Logo.svg","appleTouchIcon":"Logo.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"icon-rijian","moon":"icon-yueduye-yejianmoshi","play":"icon-24gf-playCircle","email":"icon-youxiang","next":"icon-jinrushiyan","calendar":"icon-riqi","clock":"icon-shijian","user":"icon-totop","back_top":"fas fa-arrow-up","close":"icon-anniu_guanbi","search":"icon-sousuo","reward":"icon-dashang","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"icon-read","arrows":"icon-shangxiazhankai","double_arrows":"icon-shangxiazhankai","copy":"icon-fuzhi"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":200},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-07-22 14:27:53"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="The Cabin of Hamzone" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont icon-rijian"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont icon-yueduye-yejianmoshi"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/Logo.svg">
+    
+    
+        <div class="trm-logo-text">
+            Hamzone&#39;s<span>Cabin</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/categories/" target="">
+                    categories
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/archives/" target="">
+                    archives
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/project/" target="">
+                            Project
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/gallary/" target="">
+                    Gallary
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont icon-rijian"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont icon-yueduye-yejianmoshi"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont icon-sousuo"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            针对pdb文件的数据预处理
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont fas fa-user-alt"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont fas fa-th-list"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Hamzone
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/Lhz002" title="github" rel="nofollow" target="_blank">
+            <i class="iconfont icon-github-fill"></i>
+        </a>
+    
+        <a href="https://bilibili.com" title="bilibili" rel="nofollow" target="_blank">
+            <i class="iconfont icon-bilibili"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                Name:
+            </div>
+            <div class="trm-label trm-label-light">
+                Li Hanzhang
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Location:
+            </div>
+            <div class="trm-label trm-label-light">
+                ZheJiang, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Age:
+            </div>
+            <div class="trm-label trm-label-light">
+                20
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Email:
+            </div>
+            <div class="trm-label trm-label-light">
+                Lhz1209@outlook.com
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:Lhz1209@outlook.com" class="trm-btn">
+            联系我
+            <i class="iconfont icon-youxiang"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#针对PDB文件进行数据预处理"  data-scroll-to="#针对PDB文件进行数据预处理"><span class="toc-number">1.</span> <span class="toc-text">针对PDB文件进行数据预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#PDB文件的基本构成"  data-scroll-to="#PDB文件的基本构成"><span class="toc-number">1.1.</span> <span class="toc-text">PDB文件的基本构成</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#将氨基酸纳入模型参数范围"  data-scroll-to="#将氨基酸纳入模型参数范围"><span class="toc-number">1.2.</span> <span class="toc-text">将氨基酸纳入模型参数范围</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#针对多个PDB文件进行批量处理"  data-scroll-to="#针对多个PDB文件进行批量处理"><span class="toc-number">1.3.</span> <span class="toc-text">针对多个PDB文件进行批量处理</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-riqi trm-icon"></i><br>
+            07/22
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-shijian trm-icon"></i><br>
+            14:17
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-totop trm-icon"></i><br>
+            Li Hanzhang
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="针对PDB文件进行数据预处理"><a href="#针对PDB文件进行数据预处理" class="headerlink" title="针对PDB文件进行数据预处理"></a>针对PDB文件进行数据预处理</h1><h2 id="PDB文件的基本构成"><a href="#PDB文件的基本构成" class="headerlink" title="PDB文件的基本构成"></a>PDB文件的基本构成</h2><p>首先，我们需要理解 PDB (Protein Data Bank) 文件的基本结构。PDB 文件通常包含以下几种记录类型：</p>
+<ul>
+<li>HEADER：包含有关整个结构的基本信息。</li>
+<li>COMPND：描述了分子组成。</li>
+<li>AUTHOR：指明了该结构的作者。</li>
+<li>ATOM：描述了分子中每个原子的坐标。</li>
+<li>TER：标识链的结束。</li>
+<li>CONECT：提供了原子间的键连接信息。</li>
+</ul>
+<p>对于模型训练，我们通常关注 ATOM 记录，它包含了原子的坐标信息。在利用 PyTorch 进行模型训练时，我们可能需要将这些坐标转化为张量。</p>
+<p>以下是一个基础的 PDB 文件预处理方法。这个方法将读取 PDB 文件，提取原子坐标，并将它们转化为 PyTorch 张量。</p>
+<p>首先，我们需要安装并导入一些必要的库。然而，当前的环境下没有互联网访问，所以我们假设您已经安装了以下所需的库：</p>
+<ul>
+<li><code>numpy</code>：用于数据处理</li>
+<li><code>torch</code>：PyTorch 库，用于数据预处理和模型训练</li>
+<li><code>Bio.PDB</code>：一个用于处理 PDB 文件的库，是 <code>Biopython</code> 包的一部分</li>
+</ul>
+<p><strong>注意：在您的本地环境中运行下面的代码之前，确保已经安装了这些库。</strong></p>
+<p>接下来，我们可以编写一个函数来读取 PDB 文件并将原子坐标转化为张量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pythonCopy codeimport torch</span><br><span class="line"><span class="keyword">from</span> Bio.PDB <span class="keyword">import</span> PDBParser</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdb_to_tensor</span>(<span class="params">file_path</span>):</span><br><span class="line">    parser = PDBParser(QUIET=<span class="literal">True</span>)</span><br><span class="line">    structure = parser.get_structure(<span class="string">&quot;pdb&quot;</span>, file_path)</span><br><span class="line">    </span><br><span class="line">    coordinates = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> model <span class="keyword">in</span> structure:</span><br><span class="line">        <span class="keyword">for</span> chain <span class="keyword">in</span> model:</span><br><span class="line">            <span class="keyword">for</span> residue <span class="keyword">in</span> chain:</span><br><span class="line">                <span class="keyword">for</span> atom <span class="keyword">in</span> residue:</span><br><span class="line">                    coordinates.append(atom.get_coord())</span><br><span class="line"></span><br><span class="line">    coordinates = torch.tensor(coordinates)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> coordinates</span><br></pre></td></tr></table></figure>
+
+<p>在上述函数中，我们首先使用 <code>PDBParser</code> 来读取 PDB 文件。然后，我们遍历该结构的所有模型、链、残基和原子，将每个原子的坐标添加到 <code>coordinates</code> 列表中。最后，我们将 <code>coordinates</code> 列表转化为 PyTorch 张量。</p>
+<p>使用这个函数，可以将 PDB 文件转化为 PyTorch 可处理的张量，这样就可以用于模型训练了。</p>
+<h2 id="将氨基酸纳入模型参数范围"><a href="#将氨基酸纳入模型参数范围" class="headerlink" title="将氨基酸纳入模型参数范围"></a>将氨基酸纳入模型参数范围</h2><p>如果你需要将氨基酸的化学性质和组成的结构作为参数进行训练，你需要首先编码这些属性。常见的一种方法是使用独热编码（one-hot encoding）来表示氨基酸的类型，而氨基酸的化学性质则可以通过手动定义的特征来表示。也可以使用某种嵌入（embedding）策略来表示这些特性，但这通常需要训练数据来学习。</p>
+<p>以下是一个扩展了前面函数的版本，这个函数将原子坐标、氨基酸类型（通过独热编码）和二级结构（通过 DSSP 计算）一起返回。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Bio.PDB <span class="keyword">import</span> PDBParser, DSSP</span><br><span class="line"><span class="keyword">from</span> Bio.SeqUtils <span class="keyword">import</span> IUPACData</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdb_to_tensor</span>(<span class="params">file_path</span>):</span><br><span class="line">    parser = PDBParser(QUIET=<span class="literal">True</span>)</span><br><span class="line">    structure = parser.get_structure(<span class="string">&quot;pdb&quot;</span>, file_path)</span><br><span class="line"></span><br><span class="line">    coordinates = []</span><br><span class="line">    amino_acids = []</span><br><span class="line">    sec_structure = []</span><br><span class="line"></span><br><span class="line">    model = structure[<span class="number">0</span>] <span class="comment"># We&#x27;re only using the first model here</span></span><br><span class="line">    dssp = DSSP(model, file_path) <span class="comment"># DSSP for secondary structure</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> chain <span class="keyword">in</span> model:</span><br><span class="line">        <span class="keyword">for</span> residue <span class="keyword">in</span> chain:</span><br><span class="line">            <span class="keyword">for</span> atom <span class="keyword">in</span> residue:</span><br><span class="line">                coordinates.append(atom.get_coord())</span><br><span class="line"></span><br><span class="line">                <span class="comment"># One-hot encoding of amino acid type</span></span><br><span class="line">                amino_acid = [<span class="number">0</span>]*<span class="number">20</span></span><br><span class="line">                <span class="keyword">if</span> residue.get_resname() <span class="keyword">in</span> IUPACData.protein_letters_1to3:</span><br><span class="line">                    idx = IUPACData.protein_letters.index(IUPACData.protein_letters_1to3[residue.get_resname()])</span><br><span class="line">                    amino_acid[idx] = <span class="number">1</span></span><br><span class="line">                amino_acids.append(amino_acid)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># Secondary structure</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    sec_structure.append(dssp[(chain.get_id(), residue.get_id())][<span class="number">2</span>])</span><br><span class="line">                <span class="keyword">except</span> KeyError:</span><br><span class="line">                    sec_structure.append(<span class="number">0</span>) <span class="comment"># If residue not in DSSP output, assign a default value</span></span><br><span class="line"></span><br><span class="line">    coordinates = torch.tensor(coordinates)</span><br><span class="line">    amino_acids = torch.tensor(amino_acids)</span><br><span class="line">    sec_structure = torch.tensor(sec_structure)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> coordinates, amino_acids, sec_structure</span><br></pre></td></tr></table></figure>
+
+<p>这个函数首先使用 <code>PDBParser</code> 来读取 PDB 文件。然后，遍历结构的所有链和残基，并将每个原子的坐标、残基的独热编码和二级结构添加到各自的列表中。最后，我们将这些列表转化为 PyTorch 张量。</p>
+<p>函数使用了 DSSP 来计算二级结构。DSSP 是一个可以从原子坐标计算蛋白质二级结构的程序。<code>Bio.PDB.DSSP</code> 模块提供了一个接口来运行 DSSP 并解析其输出。然而，这需要你的计算环境中已经安装了 DSSP。</p>
+<h2 id="针对多个PDB文件进行批量处理"><a href="#针对多个PDB文件进行批量处理" class="headerlink" title="针对多个PDB文件进行批量处理"></a>针对多个PDB文件进行批量处理</h2><p>为了对多个 PDB 文件进行批量处理，我们可以修改上述函数，使其可以接收一个包含多个 PDB 文件路径的列表，然后对每个文件进行处理。以下是一个修改后的函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Bio.PDB <span class="keyword">import</span> PDBParser, DSSP</span><br><span class="line"><span class="keyword">from</span> Bio.SeqUtils <span class="keyword">import</span> IUPACData</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdb_files_to_tensors</span>(<span class="params">file_paths</span>):</span><br><span class="line">    parser = PDBParser(QUIET=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    data = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> file_path <span class="keyword">in</span> file_paths:</span><br><span class="line">        structure = parser.get_structure(<span class="string">&quot;pdb&quot;</span>, file_path)</span><br><span class="line"></span><br><span class="line">        coordinates = []</span><br><span class="line">        amino_acids = []</span><br><span class="line">        sec_structure = []</span><br><span class="line"></span><br><span class="line">        model = structure[<span class="number">0</span>] <span class="comment"># We&#x27;re only using the first model here</span></span><br><span class="line">        dssp = DSSP(model, file_path) <span class="comment"># DSSP for secondary structure</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> chain <span class="keyword">in</span> model:</span><br><span class="line">            <span class="keyword">for</span> residue <span class="keyword">in</span> chain:</span><br><span class="line">                <span class="keyword">for</span> atom <span class="keyword">in</span> residue:</span><br><span class="line">                    coordinates.append(atom.get_coord())</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># One-hot encoding of amino acid type</span></span><br><span class="line">                    amino_acid = [<span class="number">0</span>]*<span class="number">20</span></span><br><span class="line">                    <span class="keyword">if</span> residue.get_resname() <span class="keyword">in</span> IUPACData.protein_letters_1to3:</span><br><span class="line">                        idx = IUPACData.protein_letters.index(IUPACData.protein_letters_1to3[residue.get_resname()])</span><br><span class="line">                        amino_acid[idx] = <span class="number">1</span></span><br><span class="line">                    amino_acids.append(amino_acid)</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># Secondary structure</span></span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        sec_structure.append(dssp[(chain.get_id(), residue.get_id())][<span class="number">2</span>])</span><br><span class="line">                    <span class="keyword">except</span> KeyError:</span><br><span class="line">                        sec_structure.append(<span class="number">0</span>) <span class="comment"># If residue not in DSSP output, assign a default value</span></span><br><span class="line"></span><br><span class="line">        coordinates = torch.tensor(coordinates)</span><br><span class="line">        amino_acids = torch.tensor(amino_acids)</span><br><span class="line">        sec_structure = torch.tensor(sec_structure)</span><br><span class="line">        </span><br><span class="line">        data.append((coordinates, amino_acids, sec_structure))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure>
+
+<p>这个函数首先创建了一个空的 <code>data</code> 列表，然后对 <code>file_paths</code> 列表中的每个文件路径，它都执行和上述函数相同的处理过程。每次处理一个文件，它都会将结果（即坐标、氨基酸类型和二级结构的张量）添加到 <code>data</code> 列表中。最后，函数返回 <code>data</code> 列表。</p>
+<p>你可以使用类似以下的方式来获取目录下所有 PDB 文件的路径，然后将这些路径传递给函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pdb_dir = <span class="string">&quot;/path/to/your/pdb/files&quot;</span></span><br><span class="line">pdb_files = [os.path.join(pdb_dir, file) <span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(pdb_dir) <span class="keyword">if</span> file.endswith(<span class="string">&#x27;.pdb&#x27;</span>)]</span><br><span class="line"></span><br><span class="line">data = pdb_files_to_tensors(pdb_files)</span><br></pre></td></tr></table></figure>
+
+</article>
+    
+    <div class="trm-reward">
+        
+            <span class="trm-reward-btn trm-glow" onclick='var qr = document.getElementById("qr"); qr.style.display = (qr.style.display === "none") ? "block" : "none";'>
+                <i class="iconfont icon-dashang"></i>
+            </span>
+        
+        <p class="trm-reward-comment">I'm so cute. Please give me money.</p>
+        <div id="qr" style="display:none;">
+            
+                <div style="display:inline-block">
+                    <a rel="noopener noreferrer" href='' target='_blank' >
+                       <img src="/null" alt="支付宝" loading="lazy">
+                    </a>
+                    <p>支付宝</p>
+                </div>
+            
+        </div>
+    </div>
+
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/07/22/AntiPre%E5%9F%BA%E4%BA%8E%E6%8A%97%E5%8E%9F%E7%9A%84%E8%BE%85%E5%8A%A9%E6%8A%97%E4%BD%93%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E6%8A%80%E6%9C%AF%E7%B1%BB/">
+                    技术类
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/07/22/AntiPre%E5%9F%BA%E4%BA%8E%E6%8A%97%E5%8E%9F%E7%9A%84%E8%BE%85%E5%8A%A9%E6%8A%97%E4%BD%93%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/" class="trm-anima-link">
+                    AntiPre基于抗原的辅助抗体生成模型
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/07/22</li>
+                <li>13:26</li>
+                
+                    <li>1.8k</li>
+                
+                
+                    <li>7</li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.9
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont icon-shangxiazhankai"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont icon-sousuo"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont icon-anniu_guanbi"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://npm.elemecdn.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.9"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.9"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.9"></script>
+
+<script src="https://unpkg.com/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://unpkg.com/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+
+</html>
