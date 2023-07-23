@@ -32,9 +32,6 @@
       <categories>
         <category>数理基础类</category>
       </categories>
-      <tags>
-        <tag>线性代数</tag>
-      </tags>
   </entry>
   <entry>
     <title>AntiPre基于抗原的辅助抗体生成模型</title>
@@ -75,9 +72,6 @@
       <categories>
         <category>技术类</category>
       </categories>
-      <tags>
-        <tag>深度学习，机器学习，VAE，Diffusion模型</tag>
-      </tags>
   </entry>
   <entry>
     <title>针对pdb文件的数据预处理</title>
@@ -121,9 +115,6 @@
       <categories>
         <category>技术类</category>
       </categories>
-      <tags>
-        <tag>深度学习，数据预处理</tag>
-      </tags>
   </entry>
   <entry>
     <title>基于VAE和transformer模型根据抗原结构生成抗体序列</title>
@@ -154,9 +145,6 @@
       <categories>
         <category>技术类</category>
       </categories>
-      <tags>
-        <tag>深度学习，transformer</tag>
-      </tags>
   </entry>
   <entry>
     <title>文献阅读林一瀚老师组：Modulating gene regulation function by chemically controlled transcription factor clustering</title>
@@ -205,8 +193,5 @@
       <categories>
         <category>文献阅读类</category>
       </categories>
-      <tags>
-        <tag>文献阅读，合成生物学，定量生物学，系统生物学，细胞命运决定</tag>
-      </tags>
   </entry>
 </search>
