@@ -7,18 +7,20 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="This is the corner of Internet, I hope to write my story here">
-<meta property="og:type" content="website">
-<meta property="og:title" content="The Cabin of Hamzone">
-<meta property="og:url" content="http://example.com/archives/index.html">
+<meta name="description" content="本文介绍了一种新的机器学习算法，可以利用蛋白质序列的进化信息来预测蛋白质的功能适应性，从而辅助蛋白质设计和定向进化。  摘要概述了ECNet的主要特点和优势： 结合局部进化上下文和全局进化上下文。ECNet使用两种类型的表示来捕捉蛋白质序列中的进化信息，一种是基于特定蛋白质的同源序列计算的局部进化上下文表示，另一种是基于大规模蛋白质序列数据库学习的全局进化上下文表示。这两种表示分别反映了蛋白质序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文献阅读：ECnet">
+<meta property="og:url" content="http://example.com/2023/07/30/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%EF%BC%9AECnet/index.html">
 <meta property="og:site_name" content="The Cabin of Hamzone">
-<meta property="og:description" content="This is the corner of Internet, I hope to write my story here">
+<meta property="og:description" content="本文介绍了一种新的机器学习算法，可以利用蛋白质序列的进化信息来预测蛋白质的功能适应性，从而辅助蛋白质设计和定向进化。  摘要概述了ECNet的主要特点和优势： 结合局部进化上下文和全局进化上下文。ECNet使用两种类型的表示来捕捉蛋白质序列中的进化信息，一种是基于特定蛋白质的同源序列计算的局部进化上下文表示，另一种是基于大规模蛋白质序列数据库学习的全局进化上下文表示。这两种表示分别反映了蛋白质序">
 <meta property="og:locale">
+<meta property="article:published_time" content="2023-07-30T05:44:45.000Z">
+<meta property="article:modified_time" content="2023-07-30T06:00:44.727Z">
 <meta property="article:author" content="Li Hanzhang">
 <meta name="twitter:card" content="summary">
 
 
-<title >The Cabin of Hamzone</title>
+<title >文献阅读：ECnet</title>
 
 <!-- Favicon -->
 
@@ -64,7 +66,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Li Hanzhang","root":"/","typed_text":["Always Learning","Always Coding","Always Improving"],"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"Logo.svg","icon16":"Logo.svg","icon32":"Logo.svg","appleTouchIcon":"Logo.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"icon-rijian","moon":"icon-yueduye-yejianmoshi","play":"icon-24gf-playCircle","email":"icon-youxiang","next":"icon-jinrushiyan","calendar":"icon-riqi","clock":"icon-shijian","user":"icon-totop","back_top":"fas fa-arrow-up","close":"icon-anniu_guanbi","search":"icon-sousuo","reward":"icon-dashang","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"icon-read","arrows":"icon-shangxiazhankai","double_arrows":"icon-shangxiazhankai","copy":"icon-fuzhi"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":200},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"path":"search.xml"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":false,"isHome":false,"postUpdate":"2023-07-30 14:00:54"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-07-30 14:00:44"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
@@ -166,7 +168,7 @@
                 
             </li>
             
-            <li class="menu-item-has-children current-menu-item">
+            <li class="menu-item-has-children ">
                 <a data-no-swup href="/archives/" target="">
                     archives
                 </a>
@@ -236,7 +238,8 @@
             <!-- top bar end -->
 
             <!-- body -->
-            <div class="trm-content-start">
+            
+<div class="trm-content-start">
     <!-- banner -->
     <div class="trm-banner" data-scroll data-scroll-direction="vertical">
     
@@ -257,10 +260,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            The article archive
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            云间连下榻，<br>天上接行杯。
+                            文献阅读：ECnet
                         </h1>
 
                         
@@ -270,7 +273,7 @@
                                 </li>
                                 <li>
                                     <span>
-                                        archives
+                                        2023
                                     </span
                                 ></li>
                             </ul>
@@ -400,271 +403,131 @@
                 <div class="trm-content" id="trm-content">
                     <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
 
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="row trm-list" style="margin-bottom: 0px;"><li class="col-lg-4 trm-list-item" style="margin: 6px 0;"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">（8）</span></li></ul>
-                
-            </div>
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-riqi trm-icon"></i><br>
+            07/30
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-shijian trm-icon"></i><br>
+            13:44
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-totop trm-icon"></i><br>
+            Li Hanzhang
         </div>
     </div>
 </div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <ul>
+<li><p>本文介绍了一种新的机器学习算法，可以利用蛋白质序列的进化信息来预测蛋白质的功能适应性，从而辅助蛋白质设计和定向进化。</p>
+</li>
+<li><p>摘要概述了ECNet的主要特点和优势：</p>
+<p>结合局部进化上下文和全局进化上下文。ECNet使用两种类型的表示来捕捉蛋白质序列中的进化信息，<strong>一种是基于特定蛋白质的同源序列计算的局部进化上下文表示，另一种是基于大规模蛋白质序列数据库学习的全局进化上下文表示。</strong>这两种表示分别反映了蛋白质序列中残基之间的协变关系和表现力，以及序列中的语义和结构特征。通过将这两种表示结合起来，ECNet能够更准确地捕捉蛋白质功能的细微差异。</p>
+<p>使用深度神经网络来学习序列到功能的映射。<strong>ECNet使用基于长短期记忆网络（LSTM）和注意力机制（Attention）的深度神经网络来建立预测模型，该网络能够学习序列到功能之间的复杂非线性映射关系</strong>。通过使用<strong>深度突变扫描或随机突变</strong>等实验方法测量得到的功能适应性数据作为监督信号，ECNet能够<strong>通过反向传播算法来更新网络参数</strong>，从而提高预测性能。</p>
+<p>在多个数据集和实验中表现出色。ECNet在多个基准实验中都取得了优异的性能，包括与其他方法在~50个深度突变扫描数据集上的比较，以及在组合突变数据集上的泛化能力。此外，ECNet还在指导TEM-1 β-内酰胺酶工程中得到了应用和验证，证明了其在蛋白质工程中的有效性和实用性。，以及在多个数据集和实验中的表现和应用。</p>
+</li>
+<li><p>文件的正文分为以下几个部分：</p>
+<ul>
+<li>引言部分介绍了蛋白质工程的背景和挑战，以及现有的机器学习方法的局限性和不足。然后提出了ECNet的主要思想和创新点，即结合了针对特定蛋白质的局部进化上下文和从大规模蛋白质序列数据库中学习的全局进化上下文，以及使用深度神经网络来学习序列到功能的映射。</li>
+<li>方法部分详细描述了ECNet的技术细节，包括如何构建蛋白质序列的表示，如何使用语言模型和直接耦合分析模型来捕捉进化上下文，如何使用循环神经网络和注意力机制来建立预测模型，以及如何使用深度突变扫描或随机突变数据来训练和评估模型。</li>
+<li>结果部分展示了ECNet在多个基准实验中的性能，包括与其他方法在~50个深度突变扫描数据集上的比较，以及在组合突变数据集上的泛化能力。此外，还展示了ECNet在指导TEM-1 β-内酰胺酶工程中的应用和验证，证明了ECNet能够成功地发现具有改善抗生素抗性的变体。</li>
+<li>讨论部分总结了ECNet的主要贡献和优势，分析了影响ECNet性能的因素，讨论了ECNet在蛋白质工程中的实际应用场景和潜在价值，以及未来可能的改进方向。</li>
+</ul>
+</li>
+</ul>
+<p><strong>方法部分主要包括以下几个步骤</strong>：</p>
+<ul>
+<li>构建蛋白质序列的表示。为了捕捉蛋白质序列中的进化信息，ECNet使用了两种类型的表示，<strong>一种是局部进化上下文表示，另一种是全局进化上下文表示</strong>。局部进化上下文表示是基于特定蛋白质的同源序列，使用直接耦合分析模型（DCA）来计算序列中每对残基之间的相互作用强度，从而反映出残基之间的协变关系和表现力。全局进化上下文表示是基于大规模的蛋白质序列数据库，使用语言模型（LM）来学习序列中每个残基出现的概率，从而反映出序列中的语义和结构特征。这两种表示都是使用神经网络来实现的，具体细节可以参考原文中的公式和图示。</li>
+<li>使用语言模型和直接耦合分析模型来捕捉进化上下文。语言模型是一种无监督的机器学习模型，它可以从大量的文本数据中学习语言的规律和统计特性。在这里，作者将蛋白质序列视为一种特殊的语言，<strong>并使用UniProt或Pfam等数据库中的蛋白质序列作为训练数据，来训练一个基于长短期记忆网络（LSTM）的语言模型</strong>。该模型的目标是根据给定的上下文，预测序列中某个位置出现某个氨基酸的概率。通过这样的训练，语言模型可以学习到蛋白质序列中隐含的语法和语义信息，以及与结构和稳定性相关的信息。<strong>直接耦合分析模型是一种基于马尔可夫随机场（MRF）的生成模型，它可以从特定蛋白质的同源序列中学习残基之间的相互作用关系。</strong>该模型使用多重序列比对（MSA）作为输入，定义一个能量函数来描述序列生成的概率，其中能量函数由单点项和双点项组成，分别表示每个残基和每对残基对能量函数的贡献。通过最大似然估计或近似推断方法，可以得到单点项和双点项的参数，从而反映出残基之间的协变程度和表达力。</li>
+<li>使用深度神经网络来建立预测模型。将局部进化上下文表示和全局进化上下文表示结合起来，就得到了蛋白质序列的完整表示。该表示作为输入，被送入一个基于LSTM和注意力机制（Attention）的深度神经网络中，该网络可以学习序列到功能之间的复杂非线性映射关系。该网络使用深度突变扫描或随机突变等实验方法测量得到的功能适应性数据作为监督信号，通过反向传播算法来更新网络参数，从而提高预测性能。</li>
+</ul>
+<p><strong>结果部分主要展示了ECNet在多个数据集和实验中的表现和应用，包括以下几个方面：</strong></p>
+<ul>
+<li>ECNet在Envision数据集上与其他蛋白质变体表示方法进行了比较，包括Yang et al.提出的基于Doc2Vec模型的固定长度向量表示，以及Envision模型提出的基于27个生物学、结构学和物理化学特征的变体表示。结果表明，ECNet在所有12个数据集上都取得了更高的斯皮尔曼相关系数和AUROC分数，说明ECNet的序列表示方法更能捕捉蛋白质功能的细微差异。</li>
+<li>ECNet在DeepSequence数据集上与其他序列建模方法进行了比较，包括三种无监督的生成模型（EVmutation，DeepSequence和Autoregressive），以及两种有监督的模型（UniRep和TAPE），后者都使用了预训练的蛋白质语言模型来学习序列表示。结果表明，ECNet在几乎所有的数据集上都取得了最高的斯皮尔曼相关系数，说明ECNet的序列建模方法更能准确地预测蛋白质功能适应性。</li>
+<li>ECNet在组合突变数据集上展示了其泛化能力，即使用低阶突变数据来训练模型，然后用来预测高阶突变的功能适应性。结果表明，ECNet在六个蛋白质的双突变数据集上都优于其他方法，并且能够从单突变数据中推断出四突变的功能适应性。此外，ECNet还能够准确地捕捉残基之间的表现力效应，并与实验观察到的表现力效应呈正相关。</li>
+<li>ECNet在TEM-1 β-内酰胺酶工程中的应用和验证。作者使用ECNet来指导TEM-1 β-内酰胺酶的定向进化，从单突变和连续双突变数据中训练模型，并用来预测高阶突变的抗生素抗性。作者从ECNet的预测结果中选择了37个新颖的高阶突变，并在实验室中构建和筛选它们。结果表明，大多数由ECNet预测的突变都比野生型TEM-1具有更高的抗生素抗性，并且有些突变甚至比训练数据中最好的突变还要好。这些结果证明了ECNet在蛋白质工程中的有效性和实用性。</li>
+</ul>
 
-<!-- history -->
+</article>
+    
+    <div class="trm-reward">
+        
+            <span class="trm-reward-btn trm-glow" onclick='var qr = document.getElementById("qr"); qr.style.display = (qr.style.display === "none") ? "block" : "none";'>
+                <i class="iconfont icon-dashang"></i>
+            </span>
+        
+        <p class="trm-reward-comment">I'm so cute. Please give me money.</p>
+        <div id="qr" style="display:none;">
+            
+                <div style="display:inline-block">
+                    <a rel="noopener noreferrer" href='' target='_blank' >
+                       <img src="/null" alt="支付宝" loading="lazy">
+                    </a>
+                    <p>支付宝</p>
+                </div>
+            
+        </div>
+    </div>
 
-<div class="row">
+    
+
+</div>
+<div id="post-next-prev" class="row">
     <div class="col-lg-12">
         <!-- title -->
         <h5 class="trm-title-with-divider">
-            
-                所有归档
-            
-            <span data-number="01"></span>
+            其他文章
+            <span data-number="02"></span>
         </h5>
     </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/07/24/Baker%E7%BB%84RFdiffusion/" class="trm-cover-frame trm-anima-link">
             
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/30/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%EF%BC%9AECnet/" class="trm-anima-link">
-                                        文献阅读：ECnet
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/30</li>
-                                        <li class="trm-accent-color">13:44</li>
-                                        
-                                        <li>2.3k</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E7%B1%BB/">
+                    文献阅读类
+                </a>
             </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/24/Baker%E7%BB%84RFdiffusion/" class="trm-anima-link">
-                                        文献阅读：davidBaker组RFdiffusion
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/24</li>
-                                        <li class="trm-accent-color">13:28</li>
-                                        
-                                        <li>2.4k</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/23/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/" class="trm-anima-link">
-                                        文献阅读林一瀚老师组：Modulating gene regulation function by chemically controlled transcription factor clustering
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/23</li>
-                                        <li class="trm-accent-color">13:59</li>
-                                        
-                                        <li>2.4k</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/22/%E5%9F%BA%E4%BA%8EVAE%E5%92%8Ctransformer%E6%A8%A1%E5%9E%8B%E6%A0%B9%E6%8D%AE%E6%8A%97%E5%8E%9F%E7%BB%93%E6%9E%84%E7%94%9F%E6%88%90%E6%8A%97%E4%BD%93%E5%BA%8F%E5%88%97/" class="trm-anima-link">
-                                        基于VAE和transformer模型根据抗原结构生成抗体序列
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/22</li>
-                                        <li class="trm-accent-color">14:46</li>
-                                        
-                                        <li>1.6k</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/22/%E9%92%88%E5%AF%B9pdb%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" class="trm-anima-link">
-                                        针对pdb文件的数据预处理
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/22</li>
-                                        <li class="trm-accent-color">14:17</li>
-                                        
-                                        <li>1.4k</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/22/AntiPre%E5%9F%BA%E4%BA%8E%E6%8A%97%E5%8E%9F%E7%9A%84%E8%BE%85%E5%8A%A9%E6%8A%97%E4%BD%93%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B/" class="trm-anima-link">
-                                        AntiPre基于抗原的辅助抗体生成模型
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/22</li>
-                                        <li class="trm-accent-color">13:26</li>
-                                        
-                                        <li>1.8k</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/21/MIT%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E5%AD%A6%E4%B9%A0/" class="trm-anima-link">
-                                        MIT线性代数学习（一）
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/21</li>
-                                        <li class="trm-accent-color">16:19</li>
-                                        
-                                        <li>322</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/20/hello-world/" class="trm-anima-link">
-                                        Hello World
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/20</li>
-                                        <li class="trm-accent-color">20:15</li>
-                                        
-                                        <li>75</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
+            <h5>
+                <a href="/2023/07/24/Baker%E7%BB%84RFdiffusion/" class="trm-anima-link">
+                    文献阅读：davidBaker组RFdiffusion
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/07/24</li>
+                <li>13:28</li>
+                
+                    <li>2.4k</li>
+                
+                
+                    <li>8</li>
+                
+            </ul>
         </div>
-        <!-- timeline end -->
     </div>
 </div>
+    
+</div>
 
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span>
-    </div>
-
-
+    
 
 
 
@@ -706,6 +569,10 @@
             <!-- body end -->
 
             <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont icon-read"></i>
+        </div>
     
     
         <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
@@ -791,6 +658,10 @@
     
 
     <!-- 评论插件 -->
+    
+        
+
+        
     
 
 
