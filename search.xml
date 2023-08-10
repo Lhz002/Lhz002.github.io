@@ -535,7 +535,208 @@
 </ul>
 ]]></content>
       <categories>
-        <category>文献阅读类</category>
+        <category>技术类</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ECnet代码解读（二）</title>
+    <url>/2023/08/10/ECnet%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p>#ecnet.py#</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ECNet</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,</span></span><br><span class="line"><span class="params">            output_dir=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">            train_tsv=<span class="literal">None</span>, test_tsv=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">            fasta=<span class="literal">None</span>, ccmpred_output=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">            use_loc_feat=<span class="literal">True</span>, use_glob_feat=<span class="literal">True</span>,</span></span><br><span class="line"><span class="params">            split_ratio=[<span class="number">0.9</span>, <span class="number">0.1</span>],</span></span><br><span class="line"><span class="params">            random_seed=<span class="number">42</span>,</span></span><br><span class="line"><span class="params">            nn_name=<span class="string">&#x27;lstm&#x27;</span>, n_ensembles=<span class="number">1</span>,</span></span><br><span class="line"><span class="params">            d_embed=<span class="number">20</span>, d_model=<span class="number">128</span>, d_h=<span class="number">128</span>, nlayers=<span class="number">1</span>,</span></span><br><span class="line"><span class="params">            batch_size=<span class="number">128</span>, save_log=<span class="literal">False</span></span>):</span><br><span class="line"></span><br><span class="line">        self.dataset = Dataset(</span><br><span class="line">            train_tsv=train_tsv, test_tsv=test_tsv,</span><br><span class="line">            fasta=fasta, ccmpred_output=ccmpred_output,</span><br><span class="line">            use_loc_feat=use_loc_feat, use_glob_feat=use_glob_feat,</span><br><span class="line">            split_ratio=split_ratio,</span><br><span class="line">            random_seed=random_seed)</span><br><span class="line">        self.saver = Saver(output_dir=output_dir)</span><br><span class="line">        self.logger = Logger(logfile=self.saver.save_dir/<span class="string">&#x27;exp.log&#x27;</span> <span class="keyword">if</span> save_log <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">        self.use_loc_feat = use_loc_feat</span><br><span class="line">        self.use_glob_feat = use_glob_feat</span><br><span class="line">        vocab_size = <span class="built_in">len</span>(vocab.AMINO_ACIDS)</span><br><span class="line">        seq_len = <span class="built_in">len</span>(self.dataset.native_sequence)</span><br><span class="line">        proj_loc_config = &#123;</span><br><span class="line">            <span class="string">&#x27;layer&#x27;</span>: nn.Linear,</span><br><span class="line">            <span class="string">&#x27;d_in&#x27;</span>: seq_len + <span class="number">1</span>,</span><br><span class="line">            <span class="string">&#x27;d_out&#x27;</span>: <span class="built_in">min</span>(<span class="number">128</span>, seq_len)</span><br><span class="line">        &#125;</span><br><span class="line">        proj_glob_config = &#123;</span><br><span class="line">            <span class="string">&#x27;layer&#x27;</span>: nn.Identity,</span><br><span class="line">            <span class="string">&#x27;d_in&#x27;</span>: <span class="number">768</span>,</span><br><span class="line">            <span class="string">&#x27;d_out&#x27;</span>: <span class="number">768</span>,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        self.device = torch.device(<span class="string">&quot;cuda&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> nn_name <span class="keyword">in</span> [<span class="string">&#x27;lstm&#x27;</span>, <span class="string">&#x27;blstm&#x27;</span>]:</span><br><span class="line">            self.models = [LSTMPredictor(</span><br><span class="line">                d_embed=d_embed, d_model=d_model, d_h=d_h, nlayers=nlayers,</span><br><span class="line">                vocab_size=vocab_size, seq_len=seq_len,</span><br><span class="line">                bidirectional=<span class="literal">True</span> <span class="keyword">if</span> nn_name == <span class="string">&#x27;blstm&#x27;</span> <span class="keyword">else</span> <span class="literal">False</span>,</span><br><span class="line">                use_loc_feat=use_loc_feat, use_glob_feat=use_glob_feat,</span><br><span class="line">                proj_loc_config=proj_loc_config, proj_glob_config=proj_glob_config</span><br><span class="line">            ).to(self.device) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_ensembles)]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> NotImplementedError</span><br><span class="line"></span><br><span class="line">        self.criterion = F.mse_loss</span><br><span class="line">        self.batch_size = batch_size</span><br><span class="line">        self.optimizers = [optim.Adam(model.parameters()) <span class="keyword">for</span> model <span class="keyword">in</span> self.models]</span><br><span class="line">        self._test_pack = <span class="literal">None</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="init-方法"><a href="#init-方法" class="headerlink" title="__init__ 方法"></a><code>__init__</code> 方法</h3><p>这个构造函数负责初始化 <code>ECNet</code> 类的所有必要组件。</p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
+<li><code>output_dir</code>：保存输出的目录路径。</li>
+<li><code>train_tsv</code>, <code>test_tsv</code>：训练和测试数据的 TSV 文件路径。</li>
+<li><code>fasta</code>, <code>ccmpred_output</code>：FASTA 文件路径和 CCMPred 输出路径。</li>
+<li><code>use_loc_feat</code>, <code>use_glob_feat</code>：是否使用本地和全局特征。</li>
+<li><code>split_ratio</code>：数据划分比例。</li>
+<li><code>random_seed</code>：随机种子，用于确保可重现性。</li>
+<li><code>nn_name</code>：神经网络类型，例如 LSTM 或双向 LSTM。</li>
+<li><code>n_ensembles</code>：模型集合的大小。</li>
+<li><code>d_embed</code>, <code>d_model</code>, <code>d_h</code>, <code>nlayers</code>：模型的维度和层数参数。</li>
+<li><code>batch_size</code>：训练批次的大小。</li>
+<li><code>save_log</code>：是否保存日志。</li>
+</ul>
+<h4 id="主要组件和流程"><a href="#主要组件和流程" class="headerlink" title="主要组件和流程"></a>主要组件和流程</h4><ol>
+<li><strong>数据集</strong>：使用 <code>Dataset</code> 类创建数据集对象，包括所有训练、验证和测试数据。</li>
+<li><strong>保存器</strong>：使用 <code>Saver</code> 类创建保存器对象，用于管理输出目录和文件保存。</li>
+<li><strong>日志记录器</strong>：使用 <code>Logger</code> 类创建日志记录器，可选择保存到文件。</li>
+<li><strong>模型参数</strong>：计算和设置模型的特定参数，如词汇表大小、序列长度和投影层配置。</li>
+<li><strong>设备</strong>：检测是否有可用的 GPU，并据此设置 PyTorch 设备。</li>
+<li><strong>模型创建</strong>：根据指定的网络类型和参数创建一个或多个 LSTM 预测器模型。</li>
+<li><strong>损失函数</strong>：设置均方误差损失函数。</li>
+<li><strong>优化器</strong>：为每个模型创建 Adam 优化器。</li>
+</ol>
+<h2 id="模型的加载点和重用接口设置"><a href="#模型的加载点和重用接口设置" class="headerlink" title="模型的加载点和重用接口设置"></a>模型的加载点和重用接口设置</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@property</span></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">test_pack</span>(<span class="params">self</span>):</span><br><span class="line">     <span class="keyword">if</span> self._test_pack <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">         test_loader, test_df = self.dataset.get_dataloader(</span><br><span class="line">             <span class="string">&#x27;test&#x27;</span>, batch_size=self.batch_size, return_df=<span class="literal">True</span>)</span><br><span class="line">         self._test_pack = (test_loader, test_df)</span><br><span class="line">     <span class="keyword">return</span> self._test_pack</span><br><span class="line"></span><br><span class="line"><span class="meta"> @property</span></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">test_loader</span>(<span class="params">self</span>):</span><br><span class="line">     <span class="keyword">return</span> self.test_pack[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta"> @property</span></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">test_df</span>(<span class="params">self</span>):</span><br><span class="line">     <span class="keyword">return</span> self.test_pack[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">load_checkpoint</span>(<span class="params">self, checkpoint_dir</span>):</span><br><span class="line">     checkpoint_dir = pathlib.Path(checkpoint_dir)</span><br><span class="line">     <span class="keyword">if</span> <span class="keyword">not</span> checkpoint_dir.is_dir():</span><br><span class="line">         <span class="keyword">raise</span> ValueError(<span class="string">f&#x27;<span class="subst">&#123;checkpoint_dir&#125;</span> is not a directory&#x27;</span>)</span><br><span class="line">     <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(self.models)):</span><br><span class="line">         checkpoint_path = <span class="string">f&#x27;<span class="subst">&#123;checkpoint_dir&#125;</span>/model_<span class="subst">&#123;i + <span class="number">1</span>&#125;</span>.pt&#x27;</span></span><br><span class="line">         self.logger.info(<span class="string">&#x27;Load pretrained model from &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(checkpoint_path))</span><br><span class="line">         pt = torch.load(checkpoint_path)</span><br><span class="line">         model_dict = self.models[i].state_dict()</span><br><span class="line">         model_pretrained_dict = &#123;k: v <span class="keyword">for</span> k, v <span class="keyword">in</span> pt[<span class="string">&#x27;model_state_dict&#x27;</span>].items() <span class="keyword">if</span> k <span class="keyword">in</span> model_dict&#125;</span><br><span class="line">         model_dict.update(model_pretrained_dict)</span><br><span class="line">         self.models[i].load_state_dict(model_dict)</span><br><span class="line">         self.optimizers[i].load_state_dict(pt[<span class="string">&#x27;optimizer_state_dict&#x27;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">load_single_pretrained_model</span>(<span class="params">self, checkpoint_path, model=<span class="literal">None</span>, optimizer=<span class="literal">None</span>, is_resume=<span class="literal">False</span></span>):</span><br><span class="line">     self.logger.info(<span class="string">&#x27;Load pretrained model from &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(checkpoint_path))</span><br><span class="line">     pt = torch.load(checkpoint_path)</span><br><span class="line">     model_dict = model.state_dict()</span><br><span class="line">     model_pretrained_dict = &#123;k: v <span class="keyword">for</span> k, v <span class="keyword">in</span> pt[<span class="string">&#x27;model_state_dict&#x27;</span>].items() <span class="keyword">if</span> k <span class="keyword">in</span> model_dict&#125;</span><br><span class="line">     model_dict.update(model_pretrained_dict)</span><br><span class="line">     model.load_state_dict(model_dict)</span><br><span class="line">     optimizer.load_state_dict(pt[<span class="string">&#x27;optimizer_state_dict&#x27;</span>])</span><br><span class="line">     <span class="keyword">return</span> (model, optimizer, pt[<span class="string">&#x27;log_info&#x27;</span>]) <span class="keyword">if</span> is_resume <span class="keyword">else</span> (model, optimizer)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">save_checkpoint</span>(<span class="params">self, ckp_name=<span class="literal">None</span>, model_dict=<span class="literal">None</span>, opt_dict=<span class="literal">None</span>, log_info=<span class="literal">None</span></span>):</span><br><span class="line">     ckp = &#123;<span class="string">&#x27;model_state_dict&#x27;</span>: model_dict,</span><br><span class="line">            <span class="string">&#x27;optimizer_state_dict&#x27;</span>: opt_dict&#125;</span><br><span class="line">     ckp[<span class="string">&#x27;log_info&#x27;</span>] = log_info</span><br><span class="line">     self.saver.save_ckp(ckp, ckp_name)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="test-pack-属性"><a href="#test-pack-属性" class="headerlink" title="test_pack 属性"></a><code>test_pack</code> 属性</h3><p>这个属性返回一个包含测试数据加载器和测试 DataFrame 的元组。</p>
+<ul>
+<li><p>流程</p>
+<p>：</p>
+<ul>
+<li>如果 <code>_test_pack</code> 尚未设置，则使用 <code>get_dataloader</code> 方法从数据集中获取测试数据加载器和测试 DataFrame。</li>
+<li>将这些值存储在 <code>_test_pack</code> 中，并返回。</li>
+</ul>
+</li>
+</ul>
+<h3 id="test-loader-和-test-df-属性"><a href="#test-loader-和-test-df-属性" class="headerlink" title="test_loader 和 test_df 属性"></a><code>test_loader</code> 和 <code>test_df</code> 属性</h3><p>这两个属性是 <code>test_pack</code> 属性的便捷访问器，分别返回测试数据加载器和测试 DataFrame。</p>
+<h3 id="load-checkpoint-方法"><a href="#load-checkpoint-方法" class="headerlink" title="load_checkpoint 方法"></a><code>load_checkpoint</code> 方法</h3><ul>
+<li><p><strong>目的</strong>：从给定的目录加载预训练的模型检查点。</p>
+</li>
+<li><p><strong>参数</strong>：<code>checkpoint_dir</code> - 包含模型检查点文件的目录路径。</p>
+</li>
+<li><p>流程</p>
+<p>：</p>
+<ul>
+<li>验证给定的路径是否为目录。</li>
+<li>对于每个模型：<ul>
+<li>构建检查点文件的路径。</li>
+<li>从文件加载检查点。</li>
+<li>更新模型的状态字典并加载到模型中。</li>
+<li>加载优化器的状态字典。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="load-single-pretrained-model-方法"><a href="#load-single-pretrained-model-方法" class="headerlink" title="load_single_pretrained_model 方法"></a><code>load_single_pretrained_model</code> 方法</h3><ul>
+<li><p><strong>目的</strong>：从给定的文件路径加载单个预训练模型。</p>
+</li>
+<li><p><strong>参数</strong>：<code>checkpoint_path</code> - 检查点文件的路径；<code>model</code> - 要加载的模型；<code>optimizer</code> - 要加载的优化器；<code>is_resume</code> - 是否返回日志信息。</p>
+</li>
+<li><p>流程</p>
+<p>：</p>
+<ul>
+<li>从文件加载检查点。</li>
+<li>更新模型的状态字典并加载到模型中。</li>
+<li>加载优化器的状态字典。</li>
+<li>返回模型、优化器和可选的日志信息。</li>
+</ul>
+</li>
+</ul>
+<h3 id="save-checkpoint-方法"><a href="#save-checkpoint-方法" class="headerlink" title="save_checkpoint 方法"></a><code>save_checkpoint</code> 方法</h3><ul>
+<li><p><strong>目的</strong>：保存模型的检查点。</p>
+</li>
+<li><p><strong>参数</strong>：<code>ckp_name</code> - 检查点的名称；<code>model_dict</code> - 模型的状态字典；<code>opt_dict</code> - 优化器的状态字典；<code>log_info</code> - 日志信息。</p>
+</li>
+<li><p>流程</p>
+<p>：</p>
+<ul>
+<li>创建一个包含状态字典和日志信息的检查点字典。</li>
+<li>使用 <code>saver</code> 的 <code>save_ckp</code> 方法保存检查点。</li>
+</ul>
+</li>
+</ul>
+<h2 id="模型训练和测试"><a href="#模型训练和测试" class="headerlink" title="模型训练和测试"></a>模型训练和测试</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">self, epochs=<span class="number">1000</span>, log_freq=<span class="number">100</span>, eval_freq=<span class="number">50</span>,</span></span><br><span class="line"><span class="params">             patience=<span class="number">500</span>, save_checkpoint=<span class="literal">False</span>, resume_path=<span class="literal">None</span></span>):</span><br><span class="line">     <span class="keyword">assert</span> eval_freq &lt;= log_freq</span><br><span class="line">     monitoring_score = <span class="string">&#x27;corr&#x27;</span></span><br><span class="line">     <span class="keyword">for</span> midx, (model, optimizer) <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">zip</span>(self.models, self.optimizers), start=<span class="number">1</span>):</span><br><span class="line">         (train_loader, train_df), (valid_loader, valid_df) = \</span><br><span class="line">             self.dataset.get_dataloader(</span><br><span class="line">                 <span class="string">&#x27;train_valid&#x27;</span>, self.batch_size,</span><br><span class="line">                 return_df=<span class="literal">True</span>, resample_train_valid=<span class="literal">True</span>)</span><br><span class="line">         <span class="keyword">if</span> resume_path <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">             model, optimizer, log_info = self.load_single_pretrained_model(</span><br><span class="line">                 <span class="string">&#x27;&#123;&#125;/model_&#123;&#125;.pt&#x27;</span>.<span class="built_in">format</span>(resume_path, midx),</span><br><span class="line">                 model=model, optimizer=optimizer, is_resume=<span class="literal">True</span>)</span><br><span class="line">             start_epoch = log_info[<span class="string">&#x27;epoch&#x27;</span>] + <span class="number">1</span></span><br><span class="line">             best_score = log_info[<span class="string">&#x27;best_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(monitoring_score)]</span><br><span class="line">         <span class="keyword">else</span>:</span><br><span class="line">             start_epoch = <span class="number">1</span></span><br><span class="line">             best_score = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">         best_model_state_dict = <span class="literal">None</span></span><br><span class="line">         stopper = EarlyStopping(patience=patience, eval_freq=eval_freq, best_score=best_score)</span><br><span class="line">         model.train()</span><br><span class="line">         <span class="keyword">try</span>:</span><br><span class="line">             <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(start_epoch, epochs + <span class="number">1</span>):</span><br><span class="line">                 time_start = time.time()</span><br><span class="line">                 tot_loss = <span class="number">0</span></span><br><span class="line">                 <span class="keyword">for</span> step, batch <span class="keyword">in</span> tqdm(<span class="built_in">enumerate</span>(train_loader, <span class="number">1</span>),</span><br><span class="line">                     leave=<span class="literal">False</span>, desc=<span class="string">f&#x27;M-<span class="subst">&#123;midx&#125;</span> E-<span class="subst">&#123;epoch&#125;</span>&#x27;</span>, total=<span class="built_in">len</span>(train_loader)):</span><br><span class="line">                     y = batch[<span class="string">&#x27;label&#x27;</span>].to(self.device)</span><br><span class="line">                     X = batch[<span class="string">&#x27;seq_enc&#x27;</span>].to(self.device)</span><br><span class="line">                     <span class="keyword">if</span> self.use_loc_feat:</span><br><span class="line">                         loc_feat = batch[<span class="string">&#x27;loc_feat&#x27;</span>].to(self.device)</span><br><span class="line">                     <span class="keyword">else</span>:</span><br><span class="line">                         loc_feat = <span class="literal">None</span></span><br><span class="line">                     <span class="keyword">if</span> self.use_glob_feat:</span><br><span class="line">                         glob_feat = batch[<span class="string">&#x27;glob_feat&#x27;</span>].to(self.device)</span><br><span class="line">                     <span class="keyword">else</span>:</span><br><span class="line">                         glob_feat = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">                     optimizer.zero_grad()</span><br><span class="line">                     output = model(X, glob_feat=glob_feat, loc_feat=loc_feat)</span><br><span class="line">                     output = output.view(-<span class="number">1</span>)</span><br><span class="line">                     loss = self.criterion(output, y)</span><br><span class="line"></span><br><span class="line">                     loss.backward()</span><br><span class="line">                     optimizer.step()</span><br><span class="line">                     tot_loss += loss.item()</span><br><span class="line"></span><br><span class="line">                 <span class="keyword">if</span> epoch % eval_freq == <span class="number">0</span>:</span><br><span class="line">                     val_results = self.test(test_model=model, test_loader=valid_loader,</span><br><span class="line">                         test_df=valid_df, mode=<span class="string">&#x27;val&#x27;</span>)</span><br><span class="line">                     model.train()</span><br><span class="line">                     is_best = stopper.update(val_results[<span class="string">&#x27;metric&#x27;</span>][monitoring_score])</span><br><span class="line">                     <span class="keyword">if</span> is_best:</span><br><span class="line">                         best_model_state_dict = copy.deepcopy(model.state_dict())</span><br><span class="line">                         <span class="keyword">if</span> save_checkpoint:</span><br><span class="line">                             self.save_checkpoint(ckp_name=<span class="string">&#x27;model_&#123;&#125;.pt&#x27;</span>.<span class="built_in">format</span>(midx),</span><br><span class="line">                                 model_dict=model.state_dict(),</span><br><span class="line">                                 opt_dict=optimizer.state_dict(),</span><br><span class="line">                                 log_info=&#123;</span><br><span class="line">                                     <span class="string">&#x27;epoch&#x27;</span>: epoch,</span><br><span class="line">                                     <span class="string">&#x27;best_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(monitoring_score): stopper.best_score,</span><br><span class="line">                                     <span class="string">&#x27;val_loss&#x27;</span>:val_results[<span class="string">&#x27;loss&#x27;</span>],</span><br><span class="line">                                     <span class="string">&#x27;val_results&#x27;</span>:val_results[<span class="string">&#x27;metric&#x27;</span>]</span><br><span class="line">                                 &#125;)</span><br><span class="line"></span><br><span class="line">                 <span class="keyword">if</span> epoch % log_freq == <span class="number">0</span>:</span><br><span class="line">                     train_results = self.test(test_model=model, test_loader=train_loader,</span><br><span class="line">                             test_df=train_df, mode=<span class="string">&#x27;val&#x27;</span>)</span><br><span class="line">                     <span class="keyword">if</span> (log_freq &lt;= eval_freq) <span class="keyword">or</span> (log_freq % eval_freq != <span class="number">0</span>):</span><br><span class="line">                         val_results = self.test(test_model=model, test_loader=valid_loader,</span><br><span class="line">                             test_df=valid_df, mode=<span class="string">&#x27;val&#x27;</span>)</span><br><span class="line">                     model.train()</span><br><span class="line">                     self.logger.info(</span><br><span class="line">                         <span class="string">&#x27;Model: &#123;&#125;/&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(midx, <span class="built_in">len</span>(self.models))</span><br><span class="line">                         + <span class="string">&#x27;\tEpoch: &#123;&#125;/&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(epoch, epochs)</span><br><span class="line">                         + <span class="string">&#x27;\tTrain loss: &#123;:.4f&#125;&#x27;</span>.<span class="built_in">format</span>(tot_loss / step)</span><br><span class="line">                         + <span class="string">&#x27;\tVal loss: &#123;:.4f&#125;&#x27;</span>.<span class="built_in">format</span>(val_results[<span class="string">&#x27;loss&#x27;</span>])                         </span><br><span class="line">                         + <span class="string">&#x27;\t&#x27;</span> + <span class="string">&#x27;\t&#x27;</span>.join([<span class="string">&#x27;Val &#123;&#125;: &#123;:.4f&#125;&#x27;</span>.<span class="built_in">format</span>(k, v) \</span><br><span class="line">                                 <span class="keyword">for</span> (k, v) <span class="keyword">in</span> val_results[<span class="string">&#x27;metric&#x27;</span>].items()])</span><br><span class="line">                         + <span class="string">&#x27;\tBest &#123;n&#125;: &#123;b:.4f&#125;\t&#x27;</span>.<span class="built_in">format</span>(n=monitoring_score, b=stopper.best_score)</span><br><span class="line">                         + <span class="string">&#x27;\t&#123;:.1f&#125; s/epoch&#x27;</span>.<span class="built_in">format</span>(time.time() - time_start)</span><br><span class="line">                         )</span><br><span class="line">                     time_start = time.time()</span><br><span class="line"></span><br><span class="line">                 <span class="keyword">if</span> stopper.early_stop:</span><br><span class="line">                     self.logger.info(<span class="string">&#x27;Eearly stop at epoch &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(epoch))</span><br><span class="line">                     <span class="keyword">break</span></span><br><span class="line">         <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">             self.logger.info(<span class="string">&#x27;Exiting model training from keyboard interrupt&#x27;</span>)</span><br><span class="line">         <span class="keyword">if</span> best_model_state_dict <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">             model.load_state_dict(best_model_state_dict)</span><br><span class="line"></span><br><span class="line">         test_results = self.test(test_model=model, model_label=<span class="string">&#x27;model_&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(midx))</span><br><span class="line">         test_res_msg = <span class="string">&#x27;Testing Model &#123;&#125;: Loss: &#123;:.4f&#125;\t&#x27;</span>.<span class="built_in">format</span>(midx, test_results[<span class="string">&#x27;loss&#x27;</span>])</span><br><span class="line">         test_res_msg += <span class="string">&#x27;\t&#x27;</span>.join([<span class="string">&#x27;Test &#123;&#125;: &#123;:.6f&#125;&#x27;</span>.<span class="built_in">format</span>(k, v) \</span><br><span class="line">                             <span class="keyword">for</span> (k, v) <span class="keyword">in</span> test_results[<span class="string">&#x27;metric&#x27;</span>].items()])</span><br><span class="line">         self.logger.info(test_res_msg + <span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="train-方法"><a href="#train-方法" class="headerlink" title="train 方法"></a><code>train</code> 方法</h3><ul>
+<li><p><strong>目的</strong>：训练模型的整个过程。</p>
+</li>
+<li><p>参数</p>
+<p>：</p>
+<ul>
+<li><code>epochs</code>：训练周期的数量。</li>
+<li><code>log_freq</code>：记录训练信息的频率。</li>
+<li><code>eval_freq</code>：进行验证和检查早期停止的频率。</li>
+<li><code>patience</code>：早期停止的耐心参数，即在验证得分没有改进时允许的连续周期数。</li>
+<li><code>save_checkpoint</code>：是否在找到更好的验证得分时保存检查点。</li>
+<li><code>resume_path</code>：从先前保存的检查点恢复训练的路径。</li>
+</ul>
+</li>
+</ul>
+<h4 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h4><ol>
+<li><p><strong>模型循环</strong>：遍历所有模型和对应的优化器。</p>
+</li>
+<li><p><strong>加载或恢复检查点</strong>：如果提供了 <code>resume_path</code>，则从检查点加载或恢复模型。</p>
+</li>
+<li><p><strong>准备训练和验证数据加载器</strong>：从数据集中获取训练和验证的数据加载器。</p>
+</li>
+<li><p><strong>早期停止</strong>：初始化一个早期停止对象来监视验证得分。</p>
+</li>
+<li><p>训练循环</p>
+<p>：</p>
+<ul>
+<li>将模型设置为训练模式。</li>
+<li>对于每个周期：<ul>
+<li>初始化时间和损失计数器。</li>
+<li>遍历训练加载器中的批次：<ul>
+<li>将批次数据移动到适当的设备上。</li>
+<li>执行前向传递和损失计算。</li>
+<li>执行反向传递和优化器步骤。</li>
+<li>累积批次损失。</li>
+</ul>
+</li>
+<li>如果到达验证频率，则在验证集上评估模型，并使用早期停止对象更新得分。</li>
+<li>如果到达日志频率，则在训练和验证集上评估模型，并记录结果。</li>
+<li>检查早期停止条件，如果满足，则中断训练。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>异常处理</strong>：捕获键盘中断，允许用户手动停止训练。</p>
+</li>
+<li><p><strong>加载最佳模型</strong>：如果找到更好的模型，则加载最佳状态字典。</p>
+</li>
+<li><p><strong>测试</strong>：在测试集上测试模型并记录结果。</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">self, test_model=<span class="literal">None</span>, test_loader=<span class="literal">None</span>, test_df=<span class="literal">None</span>,</span></span><br><span class="line"><span class="params">               checkpoint_dir=<span class="literal">None</span>, save_prediction=<span class="literal">False</span>,</span></span><br><span class="line"><span class="params">               calc_metric=<span class="literal">True</span>, calc_loss=<span class="literal">True</span>, model_label=<span class="literal">None</span>, mode=<span class="string">&#x27;test&#x27;</span></span>):</span><br><span class="line">       <span class="keyword">if</span> checkpoint_dir <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">           self.load_pretrained_model(checkpoint_dir)</span><br><span class="line">       <span class="keyword">if</span> test_loader <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">and</span> test_df <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">           test_loader = self.test_loader</span><br><span class="line">           test_df = self.test_df</span><br><span class="line">       test_models = self.models <span class="keyword">if</span> test_model <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> [test_model]</span><br><span class="line">       esb_ypred, esb_yprob = <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">       esb_loss = <span class="number">0</span></span><br><span class="line">       <span class="keyword">for</span> model <span class="keyword">in</span> test_models:</span><br><span class="line">           model.<span class="built_in">eval</span>()</span><br><span class="line">           y_true, y_pred, y_prob = <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">           tot_loss = <span class="number">0</span></span><br><span class="line">           <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">               <span class="keyword">for</span> step, batch <span class="keyword">in</span> tqdm(<span class="built_in">enumerate</span>(test_loader, <span class="number">1</span>),</span><br><span class="line">                       desc=mode, leave=<span class="literal">False</span>, total=<span class="built_in">len</span>(test_loader)):</span><br><span class="line">                   X = batch[<span class="string">&#x27;seq_enc&#x27;</span>].to(self.device)</span><br><span class="line">                   <span class="keyword">if</span> self.use_loc_feat:</span><br><span class="line">                       loc_feat = batch[<span class="string">&#x27;loc_feat&#x27;</span>].to(self.device)</span><br><span class="line">                   <span class="keyword">else</span>:</span><br><span class="line">                       loc_feat = <span class="literal">None</span></span><br><span class="line">                   <span class="keyword">if</span> self.use_glob_feat:</span><br><span class="line">                       glob_feat = batch[<span class="string">&#x27;glob_feat&#x27;</span>].to(self.device)</span><br><span class="line">                   <span class="keyword">else</span>:</span><br><span class="line">                       glob_feat = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">                   output = model(X, glob_feat=glob_feat, loc_feat=loc_feat)</span><br><span class="line">                   output = output.view(-<span class="number">1</span>)</span><br><span class="line">                   <span class="keyword">if</span> calc_loss:</span><br><span class="line">                       y = batch[<span class="string">&#x27;label&#x27;</span>].to(self.device)</span><br><span class="line">                       loss = self.criterion(output, y)</span><br><span class="line">                       tot_loss += loss.item()</span><br><span class="line">                   y_pred = output <span class="keyword">if</span> y_pred <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> torch.cat((y_pred, output), dim=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">           y_pred = y_pred.detach().cpu() <span class="keyword">if</span> self.device == torch.device(<span class="string">&#x27;cuda&#x27;</span>) <span class="keyword">else</span> y_pred.detach()</span><br><span class="line">           esb_ypred = y_pred.view(-<span class="number">1</span>, <span class="number">1</span>) <span class="keyword">if</span> esb_ypred <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> torch.cat((esb_ypred, y_pred.view(-<span class="number">1</span>, <span class="number">1</span>)), dim=<span class="number">1</span>)</span><br><span class="line">           esb_loss += tot_loss / step</span><br><span class="line"></span><br><span class="line">       esb_ypred = esb_ypred.mean(axis=<span class="number">1</span>).numpy()</span><br><span class="line">       esb_loss /= <span class="built_in">len</span>(test_models)</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> calc_metric:</span><br><span class="line">           y_fitness = test_df[<span class="string">&#x27;score&#x27;</span>].values</span><br><span class="line">           eval_results = scipy.stats.spearmanr(y_fitness, esb_ypred)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">       test_results = &#123;&#125;</span><br><span class="line">       results_df = test_df.copy()</span><br><span class="line">       results_df = results_df.drop(columns=[<span class="string">&#x27;sequence&#x27;</span>])</span><br><span class="line">       results_df[<span class="string">&#x27;prediction&#x27;</span>] = esb_ypred</span><br><span class="line">       test_results[<span class="string">&#x27;df&#x27;</span>] = results_df</span><br><span class="line">       <span class="keyword">if</span> save_prediction:</span><br><span class="line">           self.saver.save_df(results_df, <span class="string">&#x27;prediction.tsv&#x27;</span>)</span><br><span class="line">       test_results[<span class="string">&#x27;loss&#x27;</span>] = esb_loss</span><br><span class="line">       <span class="keyword">if</span> calc_metric:</span><br><span class="line">           test_results[<span class="string">&#x27;metric&#x27;</span>] = &#123;<span class="string">&#x27;corr&#x27;</span>: eval_results&#125;</span><br><span class="line">       <span class="keyword">return</span> test_results</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="test-方法"><a href="#test-方法" class="headerlink" title="test 方法"></a><code>test</code> 方法</h3><ul>
+<li><p><strong>目的</strong>：对给定的测试模型在测试加载器上的性能进行评估。</p>
+</li>
+<li><p>参数</p>
+<p>：</p>
+<ul>
+<li><code>test_model</code>：要测试的模型（可选）。</li>
+<li><code>test_loader</code>：包含测试数据的数据加载器（可选）。</li>
+<li><code>test_df</code>：包含测试数据的 DataFrame（可选）。</li>
+<li><code>checkpoint_dir</code>：从检查点加载预训练模型的目录（可选）。</li>
+<li><code>save_prediction</code>：是否保存预测结果到文件（可选）。</li>
+<li><code>calc_metric</code>：是否计算评估指标（例如相关性）（可选）。</li>
+<li><code>calc_loss</code>：是否计算损失（可选）。</li>
+<li><code>model_label</code>：模型标签（可选，未在代码中使用）。</li>
+<li><code>mode</code>：描述测试模式的字符串（例如 ‘test’ 或 ‘val’）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="主要流程-1"><a href="#主要流程-1" class="headerlink" title="主要流程"></a>主要流程</h4><ol>
+<li><p><strong>加载预训练模型</strong>：如果提供了 <code>checkpoint_dir</code>，则从检查点加载预训练模型。</p>
+</li>
+<li><p><strong>设置测试加载器和 DataFrame</strong>：如果没有提供，使用默认的测试加载器和测试 DataFrame。</p>
+</li>
+<li><p><strong>选择测试模型</strong>：如果没有提供 <code>test_model</code>，则使用所有模型进行测试。</p>
+</li>
+<li><p>模型循环</p>
+<p>：遍历要测试的模型。</p>
+<ul>
+<li>将模型设置为评估模式。</li>
+<li>初始化真实值和预测值的变量。</li>
+<li>遍历测试加载器中的批次：<ul>
+<li>将批次数据移动到适当的设备上。</li>
+<li>执行前向传递。</li>
+<li>如果 <code>calc_loss</code> 为 True，则计算损失。</li>
+<li>收集预测值。</li>
+</ul>
+</li>
+<li>累积预测值和损失。</li>
+</ul>
+</li>
+<li><p><strong>计算集成预测和损失</strong>：通过平均所有模型的预测和损失来计算集成结果。</p>
+</li>
+<li><p><strong>计算评估指标</strong>：如果 <code>calc_metric</code> 为 True，则计算相关性等评估指标。</p>
+</li>
+<li><p><strong>保存预测</strong>：如果 <code>save_prediction</code> 为 True，则将预测结果保存到文件中。</p>
+</li>
+<li><p><strong>返回结果</strong>：返回包含预测、损失和评估指标的结果字典。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>技术类</category>
       </categories>
   </entry>
 </search>
