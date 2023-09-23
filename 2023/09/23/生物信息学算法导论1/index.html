@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="线性代数基础算法练习Maximum NumberGiven a series of numbers, get the maximum one. Specifications INPUT a series (length ranged [1,4096]) of integers ranged [−214,214]. OUTPUT the maximum one.  Sample1234513233">
+<meta property="og:type" content="article">
+<meta property="og:title" content="生物信息学算法导论1">
+<meta property="og:url" content="http://example.com/2023/09/23/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA1/index.html">
+<meta property="og:site_name" content="The Cabin of Hamzone">
+<meta property="og:description" content="线性代数基础算法练习Maximum NumberGiven a series of numbers, get the maximum one. Specifications INPUT a series (length ranged [1,4096]) of integers ranged [−214,214]. OUTPUT the maximum one.  Sample1234513233">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-09-23T02:33:42.000Z">
+<meta property="article:modified_time" content="2023-09-23T03:17:46.932Z">
+<meta property="article:author" content="Li Hanzhang">
+<meta name="twitter:card" content="summary">
+
+
+<title >生物信息学算法导论1</title>
+
+<!-- Favicon -->
+
+    <link href='/Logo.svg?v=2.0.9' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/Logo.svg?v=2.0.9' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/Logo.svg?v=2.0.9' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4177738_vsqmc23e2y.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Li Hanzhang","root":"/","typed_text":["Always Learning","Always Coding","Always Improving"],"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"Logo.svg","icon16":"Logo.svg","icon32":"Logo.svg","appleTouchIcon":"Logo.svg","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"icon-rijian","moon":"icon-yueduye-yejianmoshi","play":"icon-24gf-playCircle","email":"icon-youxiang","next":"icon-jinrushiyan","calendar":"icon-riqi","clock":"icon-shijian","user":"icon-totop","back_top":"fas fa-arrow-up","close":"icon-anniu_guanbi","search":"icon-sousuo","reward":"icon-dashang","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"icon-read","arrows":"icon-shangxiazhankai","double_arrows":"icon-shangxiazhankai","copy":"icon-fuzhi"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":200},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-09-23 11:17:46"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="The Cabin of Hamzone" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont icon-rijian"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont icon-yueduye-yejianmoshi"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/Logo.svg">
+    
+    
+        <div class="trm-logo-text">
+            Hamzone&#39;s<span>Cabin</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/categories/" target="">
+                    categories
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/archives/" target="">
+                    archives
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/project/" target="">
+                            Project
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/gallary/" target="">
+                    Gallary
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont icon-rijian"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont icon-yueduye-yejianmoshi"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont icon-sousuo"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            生物信息学算法导论1
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont fas fa-user-alt"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont fas fa-th-list"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Hamzone
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/Lhz002" title="github" rel="nofollow" target="_blank">
+            <i class="iconfont icon-github-fill"></i>
+        </a>
+    
+        <a href="https://bilibili.com" title="bilibili" rel="nofollow" target="_blank">
+            <i class="iconfont icon-bilibili"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                Name:
+            </div>
+            <div class="trm-label trm-label-light">
+                Li Hanzhang
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Location:
+            </div>
+            <div class="trm-label trm-label-light">
+                ZheJiang, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Age:
+            </div>
+            <div class="trm-label trm-label-light">
+                20
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Email:
+            </div>
+            <div class="trm-label trm-label-light">
+                Lhz1209@outlook.com
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:Lhz1209@outlook.com" class="trm-btn">
+            联系我
+            <i class="iconfont icon-youxiang"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#线性代数基础"  data-scroll-to="#线性代数基础"><span class="toc-number">1.</span> <span class="toc-text">线性代数基础</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#算法练习"  data-scroll-to="#算法练习"><span class="toc-number">2.</span> <span class="toc-text">算法练习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Maximum-Number"  data-scroll-to="#Maximum-Number"><span class="toc-number">2.1.</span> <span class="toc-text">Maximum Number</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Specifications"  data-scroll-to="#Specifications"><span class="toc-number">2.2.</span> <span class="toc-text">Specifications</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Sample"  data-scroll-to="#Sample"><span class="toc-number">2.3.</span> <span class="toc-text">Sample</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Code-Template"  data-scroll-to="#Code-Template"><span class="toc-number">2.4.</span> <span class="toc-text">Code Template</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Implementation-Limitations"  data-scroll-to="#Implementation-Limitations"><span class="toc-number">2.5.</span> <span class="toc-text">Implementation Limitations</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#My-answer"  data-scroll-to="#My-answer"><span class="toc-number">2.6.</span> <span class="toc-text">My answer</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#算法解释"  data-scroll-to="#算法解释"><span class="toc-number">2.7.</span> <span class="toc-text">算法解释</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Bubble-Sort"  data-scroll-to="#Bubble-Sort"><span class="toc-number">2.8.</span> <span class="toc-text">Bubble Sort</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Specifications-1"  data-scroll-to="#Specifications-1"><span class="toc-number">2.9.</span> <span class="toc-text">Specifications</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Sample-1"  data-scroll-to="#Sample-1"><span class="toc-number">2.10.</span> <span class="toc-text">Sample</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Code-Template-1"  data-scroll-to="#Code-Template-1"><span class="toc-number">2.11.</span> <span class="toc-text">Code Template</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Implementation-Limitations-1"  data-scroll-to="#Implementation-Limitations-1"><span class="toc-number">2.12.</span> <span class="toc-text">Implementation Limitations</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#My-answer-1"  data-scroll-to="#My-answer-1"><span class="toc-number">2.13.</span> <span class="toc-text">My answer</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#算法解释-1"  data-scroll-to="#算法解释-1"><span class="toc-number">2.14.</span> <span class="toc-text">算法解释</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Selection-Sort"  data-scroll-to="#Selection-Sort"><span class="toc-number">2.15.</span> <span class="toc-text">Selection Sort</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Specifications-2"  data-scroll-to="#Specifications-2"><span class="toc-number">2.16.</span> <span class="toc-text">Specifications</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Sample-2"  data-scroll-to="#Sample-2"><span class="toc-number">2.17.</span> <span class="toc-text">Sample</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Code-Template-2"  data-scroll-to="#Code-Template-2"><span class="toc-number">2.18.</span> <span class="toc-text">Code Template</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Implementation-Limitations-2"  data-scroll-to="#Implementation-Limitations-2"><span class="toc-number">2.19.</span> <span class="toc-text">Implementation Limitations</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#My-answer-2"  data-scroll-to="#My-answer-2"><span class="toc-number">2.20.</span> <span class="toc-text">My answer</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#算法解释-2"  data-scroll-to="#算法解释-2"><span class="toc-number">2.21.</span> <span class="toc-text">算法解释</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-riqi trm-icon"></i><br>
+            09/23
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-shijian trm-icon"></i><br>
+            10:33
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont icon-totop trm-icon"></i><br>
+            Li Hanzhang
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="线性代数基础"><a href="#线性代数基础" class="headerlink" title="线性代数基础"></a>线性代数基础</h1><h1 id="算法练习"><a href="#算法练习" class="headerlink" title="算法练习"></a>算法练习</h1><h2 id="Maximum-Number"><a href="#Maximum-Number" class="headerlink" title="Maximum Number"></a>Maximum Number</h2><p>Given a series of numbers, get the maximum one.</p>
+<h2 id="Specifications"><a href="#Specifications" class="headerlink" title="Specifications"></a>Specifications</h2><ul>
+<li><strong>INPUT</strong> a series (length ranged [1,4096]) of integers ranged [−214,214].</li>
+<li><strong>OUTPUT</strong> the maximum one.</li>
+</ul>
+<h2 id="Sample"><a href="#Sample" class="headerlink" title="Sample"></a>Sample</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<h2 id="Code-Template"><a href="#Code-Template" class="headerlink" title="Code Template"></a>Code Template</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> Iterable</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">my_max</span>(<span class="params">s: Iterable[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    ... <span class="comment"># Your code here</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(my_max(<span class="built_in">map</span>(<span class="built_in">int</span>, sys.stdin)))</span><br></pre></td></tr></table></figure>
+
+<h2 id="Implementation-Limitations"><a href="#Implementation-Limitations" class="headerlink" title="Implementation Limitations"></a>Implementation Limitations</h2><p>You should not use <code>max</code> function. Implement this function using loops and assignments only.</p>
+<h2 id="My-answer"><a href="#My-answer" class="headerlink" title="My answer"></a>My answer</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> Iterable</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">my_max</span>(<span class="params">s: Iterable[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    max_num = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> s:</span><br><span class="line">        <span class="keyword">if</span> max_num <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> num &gt; max_num:</span><br><span class="line">            max_num = num</span><br><span class="line">    <span class="keyword">return</span> max_num</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(my_max(<span class="built_in">map</span>(<span class="built_in">int</span>, sys.stdin)))</span><br></pre></td></tr></table></figure>
+
+<h2 id="算法解释"><a href="#算法解释" class="headerlink" title="算法解释"></a>算法解释</h2><ol>
+<li>定义一个max_num来作为迭代用的变量</li>
+<li>对可迭代的s对象进行遍历，如果遍历到比max_num更大的数，则迭代max_num</li>
+</ol>
+<h2 id="Bubble-Sort"><a href="#Bubble-Sort" class="headerlink" title="Bubble Sort"></a>Bubble Sort</h2><h2 id="Specifications-1"><a href="#Specifications-1" class="headerlink" title="Specifications"></a>Specifications</h2><ul>
+<li><strong>INPUT</strong> A list (length ranged [0,10000]) of integers ranged [−214,214] that can be read by the <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/json.html"><code>json</code></a> module of Python standard library.</li>
+<li><strong>OUTPUT</strong> A list of sorted integers serialized by the <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/json.html"><code>json</code></a> module of Python standard library.</li>
+</ul>
+<h2 id="Sample-1"><a href="#Sample-1" class="headerlink" title="Sample"></a>Sample</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[-22, -6, -7, 80, 62, 79, 21]</span><br><span class="line">[-22, -7, -6, 21, 62, 79, 80]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Code-Template-1"><a href="#Code-Template-1" class="headerlink" title="Code Template"></a>Code Template</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bubble_sort</span>(<span class="params">l: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    In-Place Selection Sort</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :param l: The unsorted input array. IT WILL BE MUTATED INSIDE THE FUNCTION.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    ... <span class="comment"># Your code here.</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    l = <span class="built_in">list</span>(json.load(sys.stdin))</span><br><span class="line">    bubble_sort(l)</span><br><span class="line">    json.dump(l, sys.stdout)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Implementation-Limitations-1"><a href="#Implementation-Limitations-1" class="headerlink" title="Implementation Limitations"></a>Implementation Limitations</h2><p>The bubble sort algorithm should be <strong>IN PLACE</strong> without requesting for more memories.</p>
+<h2 id="My-answer-1"><a href="#My-answer-1" class="headerlink" title="My answer"></a>My answer</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bubble_sort</span>(<span class="params">l: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    n = <span class="built_in">len</span>(l)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n - i - <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> l[j] &gt; l[j + <span class="number">1</span>]:</span><br><span class="line">                l[j], l[j + <span class="number">1</span>] = l[j + <span class="number">1</span>], l[j]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    l = <span class="built_in">list</span>(json.load(sys.stdin))</span><br><span class="line">    bubble_sort(l)</span><br><span class="line">    json.dump(l, sys.stdout)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="算法解释-1"><a href="#算法解释-1" class="headerlink" title="算法解释"></a>算法解释</h2><p>冒泡排序</p>
+<ol>
+<li>对相邻两个对象进行比较，如果前面的比后面的大，则进行换位</li>
+<li>当遍历换位完整个列表时，再遍历一次判断是否存在前者大于后者的元素，如果没有，则返回列表</li>
+</ol>
+<h2 id="Selection-Sort"><a href="#Selection-Sort" class="headerlink" title="Selection Sort"></a>Selection Sort</h2><p>Selection sort is one of the most basic sorting algorithms in computer science. It has an <em>O</em>(<em>n</em>2) complexity so is not commonly used to sort large arrays. The algorithm of selection sort is simple: It iterates the array and finds the smallest (or largest, depending on the sorting order) value, and pushes the value to a sorted sublist of items which is built up from left to right at the front. It repeatedly iterates the array unless there is no element left.</p>
+<h2 id="Specifications-2"><a href="#Specifications-2" class="headerlink" title="Specifications"></a>Specifications</h2><ul>
+<li><strong>INPUT</strong> A JSON-encoded list (length ranged [0,10000]) of integers ranged [−214,214].</li>
+<li><strong>OUTPUT</strong> A JSON-encoded list of sorted integers.</li>
+</ul>
+<h2 id="Sample-2"><a href="#Sample-2" class="headerlink" title="Sample"></a>Sample</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[-22, -6, -7, 80, 62, 79, 21]</span><br><span class="line">[-22, -7, -6, 21, 62, 79, 80]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Code-Template-2"><a href="#Code-Template-2" class="headerlink" title="Code Template"></a>Code Template</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">selection_sort</span>(<span class="params">l: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    In-Place Selection Sort</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :param l: The unsorted input array. IT WILL BE MUTATED INSIDE THE FUNCTION.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    ... <span class="comment"># Your code here.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    l = <span class="built_in">list</span>(json.load(sys.stdin))</span><br><span class="line">    selection_sort(l)</span><br><span class="line">    json.dump(l, sys.stdout)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Implementation-Limitations-2"><a href="#Implementation-Limitations-2" class="headerlink" title="Implementation Limitations"></a>Implementation Limitations</h2><p>The selection sort algorithm should be <strong>IN PLACE</strong> without requesting for more memories. For example, the following selection-sort-like algorithm can also sort arrays but is <strong>NOT</strong> considered correct:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">selection_sort_not_inplace</span>(<span class="params">l: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">    retl = []</span><br><span class="line">    <span class="keyword">while</span> l:</span><br><span class="line">        min_l = <span class="built_in">min</span>(l)</span><br><span class="line">        l.remove(min_l)</span><br><span class="line">        retl.append(min_l)</span><br><span class="line">    <span class="keyword">return</span> retl</span><br></pre></td></tr></table></figure>
+
+<h2 id="My-answer-2"><a href="#My-answer-2" class="headerlink" title="My answer"></a>My answer</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">selection_sort</span>(<span class="params">l: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    n = <span class="built_in">len</span>(l)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        min_idx = i</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i+<span class="number">1</span>, n):</span><br><span class="line">            <span class="keyword">if</span> l[j] &lt; l[min_idx]:</span><br><span class="line">                min_idx = j</span><br><span class="line">        l[i], l[min_idx] = l[min_idx], l[i]</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    l = <span class="built_in">list</span>(json.load(sys.stdin))</span><br><span class="line">    selection_sort(l)</span><br><span class="line">    json.dump(l, sys.stdout)</span><br></pre></td></tr></table></figure>
+
+<h2 id="算法解释-2"><a href="#算法解释-2" class="headerlink" title="算法解释"></a>算法解释</h2><ol>
+<li>第一轮从下标为 1 到下标为 n-1 的元素中选取最小值，若小于第一个数，则交换</li>
+<li>第二轮从下标为 2 到下标为 n-1 的元素中选取最小值，若小于第二个数，则交换</li>
+</ol>
+
+</article>
+    
+    <div class="trm-reward">
+        
+            <span class="trm-reward-btn trm-glow" onclick='var qr = document.getElementById("qr"); qr.style.display = (qr.style.display === "none") ? "block" : "none";'>
+                <i class="iconfont icon-dashang"></i>
+            </span>
+        
+        <p class="trm-reward-comment">I'm so cute. Please give me money.</p>
+        <div id="qr" style="display:none;">
+            
+                <div style="display:inline-block">
+                    <a rel="noopener noreferrer" href='' target='_blank' >
+                       <img src="/null" alt="支付宝" loading="lazy">
+                    </a>
+                    <p>支付宝</p>
+                </div>
+            
+        </div>
+    </div>
+
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/09/18/Leetcode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%982/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E6%8A%80%E6%9C%AF%E7%B1%BB/">
+                    技术类
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/09/18/Leetcode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%982/" class="trm-anima-link">
+                    Leetcode每日一题2
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/09/18</li>
+                <li>08:37</li>
+                
+                    <li>787</li>
+                
+                
+                    <li>3</li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.9
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont icon-shangxiazhankai"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont icon-sousuo"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont icon-anniu_guanbi"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://npm.elemecdn.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.9"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.9"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.9"></script>
+
+<script src="https://unpkg.com/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://unpkg.com/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+
+</html>
